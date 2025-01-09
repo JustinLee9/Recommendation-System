@@ -3,6 +3,7 @@ from flask_cors import CORS
 import sqlite3
 
 app = Flask(__name__)
+CORS(app)
 
 def get_db_connection():
     conn = sqlite3.connect('movie_recommendations.db')
@@ -65,14 +66,19 @@ def add_rating():
 
 @app.route('/api/movies', methods=['GET'])
 def get_movies():
-    conn = get_db_connection()
+    page = int(request.args.get('page', 1))
+    per_page = int(request.args.get('per_page', 20))
+    offset = (page - 1) * per_page
+
+    conn = sqlite3.connect("movie_recommendations.db")
+    conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM Movies")
-    movies = cursor.fetchall()
+
+    query = "SELECT * FROM Movies LIMIT ? OFFSET ?"
+    movies = cursor.execute(query, (per_page, offset)).fetchall()
     conn.close()
 
-    movies_list = [dict(movie) for movie in movies]
-    return jsonify({movies_list})
+    return jsonify([dict(movie) for movie in movies])
 
 @app.route('/api/users', methods=['GET'])
 def get_users():

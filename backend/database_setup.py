@@ -21,7 +21,8 @@ CREATE TABLE IF NOT EXISTS Movies (
     genres TEXT NOT NULL,
     age_rating TEXT NOT NULL,
     rating REAL,
-    release_date TEXT
+    release_date TEXT,
+    backdrop_image TEXT
 )
 ''')
 

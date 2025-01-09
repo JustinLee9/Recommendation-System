@@ -13,7 +13,8 @@ CREATE TABLE IF NOT EXISTS Movies (
     genres TEXT NOT NULL,
     age_rating TEXT NOT NULL,
     rating REAL,
-    release_date TEXT
+    release_date TEXT,
+    backdrop_image TEXT
 )
 ''')
 
@@ -28,12 +29,13 @@ with open(csv_file_path, newline='', encoding='utf-8') as csvfile:
             "genres": row["genres"],
             "age_rating": "Adult" if row["adult"].lower() == "true" else "General",
             "rating": float(row["vote_average"]) if row["vote_average"] else None,
-            "release_date": row["release_date"]
+            "release_date": row["release_date"],
+            "backdrop_image": row["poster_path"]
         })
     
     cursor.executemany('''
-    INSERT OR REPLACE INTO Movies (movie_id, title, genres, age_rating, rating, release_date)
-    VALUES (:movie_id, :title, :genres, :age_rating, :rating, :release_date)
+    INSERT OR REPLACE INTO Movies (movie_id, title, genres, age_rating, rating, release_date, backdrop_image)
+    VALUES (:movie_id, :title, :genres, :age_rating, :rating, :release_date, :backdrop_image)
     ''', movies)
 
 conn.commit()
