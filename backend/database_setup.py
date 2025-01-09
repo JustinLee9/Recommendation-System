@@ -4,6 +4,7 @@ conn = sqlite3.connect('movie_recommendations.db')
 
 cursor = conn.cursor()
 
+# Users table
 cursor.execute('''
 CREATE TABLE IF NOT EXISTS Users (
     user_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -12,16 +13,19 @@ CREATE TABLE IF NOT EXISTS Users (
 )
 ''')
 
+# Movies table
 cursor.execute('''
 CREATE TABLE IF NOT EXISTS Movies (
     movie_id INTEGER PRIMARY KEY AUTOINCREMENT,
     title TEXT NOT NULL,
-    genre TEXT NOT NULL,
+    genres TEXT NOT NULL,
     age_rating TEXT NOT NULL,
-    average_rating REAL
+    rating REAL,
+    release_date TEXT
 )
 ''')
 
+# Ratings table
 cursor.execute('''
 CREATE TABLE IF NOT EXISTS Ratings (
     rating_id INTEGER PRIMARY KEY AUTOINCREMENT,
